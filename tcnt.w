@@ -13,15 +13,13 @@ void main(int argc, char **argv)
 {
   @<Set external encoding@>;
   @<Open com-port@>;
-  @<Save tty settings@>;
-  @<Set tty settings@>;
+  @<Configure TTY@>;
   if (ioctl(comfd, TIOCMBIS, &dtr_rts) == -1) {
     fwprintf(stderr, L"DTR/RTS: %m\n");
-    @<Restore tty settings@>@;
     close(comfd);
     exit(EXIT_FAILURE);
   }
-  @<Read tty@>@; /* endlessly */
+  @<Read from TTY@>@; /* endlessly */
 }
 
 @ |comfd| contains file descriptor for com-port.
@@ -45,13 +43,13 @@ if ((comfd = open(argc == 3 ? argv[2] : COM_PORT, O_RDWR)) == -1) {
   exit(EXIT_FAILURE);
 }
 
-@ @<Set tty...@>=
+@ @<Configure TTY@>=
 struct termios com_tty;
 tcgetattr(comfd, &com_tty);
 cfmakeraw(&com_tty);
 tcsetattr(comfd, TCSANOW, &com_tty);
 
-@ @<Read tty@>=
+@ @<Read from TTY@>=
 uint8_t n;
 while (read(comfd, &n, 1) > 0) { /* FIXME: try `|!= 0|' */
       char s[10];
