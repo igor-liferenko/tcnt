@@ -1,4 +1,8 @@
-@ @c
+% To compile certain section, change "@@(/dev/null@@>=" to "@@c".
+
+@ This code demonstrates such-and-such.
+
+@(/dev/null@>=
 @<Header files@>@;
 @<Type definitions@>@;
 @<Global variables@>@;
