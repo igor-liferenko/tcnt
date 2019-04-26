@@ -46,23 +46,25 @@ void main(void)
   }
 }
 
-@ This code demonstrates that in CTC mode \.{OCIE0A} is used
-instead of \.{TOIE0} when counter reaches TOP.
+@ This code demonstrates that counter is not reset after executing interrupt.
 
 @c
 #include <avr/interrupt.h>
+#include <util/delay.h>
 volatile uint8_t flag = 0;
-ISR(TIMER0_OVF_vect)
+ISR(TIMER0_COMPA_vect)
 {
-  PORTB ^= 1 << PB0;
+  flag = 1;
+//  TCNT0 = 0;
 }
 void main(void)
 {
   @<Connect...@>@;
+  PORTB |= 1 << PB0;
   DDRB |= 1 << PB0;
-  OCR0A = 1;
-  TIMSK0 |= 1 << TOIE0;
-  TCCR0B |= 1 << WGM01 | 1 << CS02 | 1 << CS00; /* 1 clock tick = 4ms */
+  OCR0A = 200; /* interrupt is triggered when counter reaches this */
+  TIMSK0 |= 1 << OCIE0A;
+  TCCR0B |= 1 << CS02 | 1 << CS00; /* max prescaler (64us per tick) */
 
   while (1) {
     @<Get |...@>@;
