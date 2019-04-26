@@ -32,7 +32,49 @@ void main(void)
   UEDATX = TCNT0;
   UEINTX &= ~(1 << FIFOCON);
 
-  @<Handle USB@>@;
+  int once = 0;
+  while (1) {
+    @<Get |...@>@;
+    if (dtr_rts && !once) {
+      once++;
+      UENUM = EP1;
+      while (!(UEINTX & 1 << TXINI)) ;
+      UEINTX &= ~(1 << TXINI);
+      UEDATX = TCNT0;
+      UEINTX &= ~(1 << FIFOCON);
+    }
+  }
+}
+
+@ This code demonstrates that in CTC mode \.{OCIE0A} is used
+instead of \.{TOIE0} when counter reaches TOP.
+
+@c
+#include <avr/interrupt.h>
+volatile uint8_t flag = 0;
+ISR(TIMER0_OVF_vect)
+{
+  PORTB ^= 1 << PB0;
+}
+void main(void)
+{
+  @<Connect...@>@;
+  DDRB |= 1 << PB0;
+  OCR0A = 1;
+  TIMSK0 |= 1 << TOIE0;
+  TCCR0B |= 1 << WGM01 | 1 << CS02 | 1 << CS00; /* 1 clock tick = 4ms */
+
+  while (1) {
+    @<Get |...@>@;
+    if (dtr_rts && flag) {
+      flag = 0;
+      UENUM = EP1;  
+      while (!(UEINTX & 1 << TXINI)) ;  
+      UEINTX &= ~(1 << TXINI);  
+      UEDATX = TCNT0;  
+      UEINTX &= ~(1 << FIFOCON);  
+    }
+  }
 }
 
 @ No other requests except {\caps set control line state} come
@@ -50,13 +92,6 @@ if (UEINTX & 1 << RXSTPI) {
   UEINTX &= ~(1 << RXSTPI);
   UEINTX &= ~(1 << TXINI); /* STATUS stage */
   dtr_rts = wValue;
-}
-
-@ Control requests should not be leaved unhandled.
-
-@<Handle USB@>=
-while (1) {
-  @<Get |dtr_rts|@>@;
 }
 
 @i ../usb/IN-endpoint-management.w
