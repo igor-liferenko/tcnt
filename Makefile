@@ -3,7 +3,7 @@ MCU=atmega32u4
 test:
 	@grep -q '^@c$$' $@.w || ( echo 'NO SECTION ENABLED'; false )
 	@grep '^@c$$' $@.w | wc -l | grep -q '^1$$' || ( echo 'MORE THAN ONE SECTION ENABLED'; false )
-	@avr-gcc -mmcu=$(MCU) -g -Os -o fw.elf $@.c
+	@avr-gcc -mmcu=$(MCU) -DF_CPU=16000000UL -g -Os -o fw.elf $@.c
 	@avr-objcopy -O ihex fw.elf fw.hex
 
 flash:
