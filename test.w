@@ -51,6 +51,7 @@ void main(void)
 @c
 #include <avr/interrupt.h>
 #include <util/delay.h>
+
 volatile uint8_t flag = 0;
 ISR(TIMER0_COMPA_vect)
 {
@@ -60,8 +61,7 @@ ISR(TIMER0_COMPA_vect)
 void main(void)
 {
   @<Connect...@>@;
-  PORTB |= 1 << PB0;
-  DDRB |= 1 << PB0;
+
   OCR0A = 200; /* interrupt is triggered when counter reaches this */
   TIMSK0 |= 1 << OCIE0A;
   TCCR0B |= 1 << CS02 | 1 << CS00; /* max prescaler (64us per tick) */
