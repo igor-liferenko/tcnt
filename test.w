@@ -32,7 +32,7 @@ void main(void)
   UEDATX = TCNT0;
   UEINTX &= ~(1 << FIFOCON);
 
-  while (1) @<Get |...@>@;
+  @<Handle USB@>@;
 }
 
 @ No other requests except {\caps set control line state} come
@@ -42,15 +42,21 @@ It is used by host to say the device not to send when DTR/RTS is not on.
 @<Global variables@>=
 U16 dtr_rts = 0;
 
-@ @<Get |dtr_rts|@>= {
-  UENUM = EP0;
-  if (UEINTX & 1 << RXSTPI) {
-    (void) UEDATX; @+ (void) UEDATX;
-    wValue = UEDATX | UEDATX << 8;
-    UEINTX &= ~(1 << RXSTPI);
-    UEINTX &= ~(1 << TXINI); /* STATUS stage */
-    dtr_rts = wValue;
-  }
+@ @<Get |dtr_rts|@>=
+UENUM = EP0;
+if (UEINTX & 1 << RXSTPI) {
+  (void) UEDATX; @+ (void) UEDATX;
+  wValue = UEDATX | UEDATX << 8;
+  UEINTX &= ~(1 << RXSTPI);
+  UEINTX &= ~(1 << TXINI); /* STATUS stage */
+  dtr_rts = wValue;
+}
+
+@ Control requests should not be leaved unhandled.
+
+@<Handle USB@>=
+while (1) {
+  @<Get |dtr_rts|@>@;
 }
 
 @i ../usb/IN-endpoint-management.w
