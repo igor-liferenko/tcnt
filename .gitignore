@@ -1,4 +1,4 @@
-tcu
+tcnt
 *.c
 fw.elf
 fw.hex
