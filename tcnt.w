@@ -8,13 +8,21 @@ void main(void)
 {
   @<Connect to USB host (must be called first; |sei| is called here)@>@;
 
+  DDRD |= 1 << PD7;
+  TCCR0B |= 1 << CS02 | 1 << CS01;
+
+  PORTD |= 1 << PD7; PORTD &= ~(1 << PD7); /* one tick */
+
+  __asm__ __volatile__ ("nop"); __asm__ __volatile__ ("nop"); /* before reading counter
+    FIXME: why to nop's? */
+
+  UENUM = EP1;
+  while (!(UEINTX & 1 << TXINI)) ;
+  UEINTX &= ~(1 << TXINI);
+  UEDATX = TCNT0;
+  UEINTX &= ~(1 << FIFOCON);
   while (1) {
     @<If there is a request on |EP0|, handle it@>@;
-    UENUM = EP1;
-    while (!(UEINTX & 1 << TXINI)) ;
-    UEINTX &= ~(1 << TXINI);
-    UEDATX = TCNT0;
-    UEINTX &= ~(1 << FIFOCON);
   }
 }
 
