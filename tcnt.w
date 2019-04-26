@@ -16,25 +16,37 @@ void main(void)
   __asm__ __volatile__ ("nop"); __asm__ __volatile__ ("nop"); /* before reading counter
     FIXME: why to nop's? */
 
+  while (1) {
+    @<Get |dtr_rts|@>@;
+    if (dtr_rts) break;
+  }
+
   UENUM = EP1;
   while (!(UEINTX & 1 << TXINI)) ;
   UEINTX &= ~(1 << TXINI);
   UEDATX = TCNT0;
   UEINTX &= ~(1 << FIFOCON);
+
   while (1) {
-    @<If there is a request on |EP0|, handle it@>@;
+    @<Get |dtr_rts|@>@;
   }
 }
 
 @ No other requests except {\caps set control line state} come
-after connection is established. These are from \\{open} and implicit \\{close}
-in \.{time-write}. Just discard the data.
+after connection is established.
+It is used by host to say the device not to send when DTR/RTS is not on.
 
-@<If there is a request on |EP0|, handle it@>=
+@<Global variables@>=
+U16 dtr_rts = 0;
+
+@ @<Get |dtr_rts|@>=
 UENUM = EP0;
 if (UEINTX & 1 << RXSTPI) {
+  (void) UEDATX; @+ (void) UEDATX;
+  wValue = UEDATX | UEDATX << 8;
   UEINTX &= ~(1 << RXSTPI);
   UEINTX &= ~(1 << TXINI); /* STATUS stage */
+  dtr_rts = wValue;
 }
 
 @i ../usb/IN-endpoint-management.w
