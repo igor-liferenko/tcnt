@@ -1,16 +1,17 @@
 % To compile certain section, change "@@(/dev/null@@>=" to "@@c".
 
-@ This code demonstrates such-and-such.
-
-@(/dev/null@>=
+@ @c
 @<Header files@>@;
 @<Type definitions@>@;
 @<Global variables@>@;
 @<Create ISR for connecting to USB host@>@;
 
+@ This code demonstrates such-and-such.
+
+@(/dev/null@>=
 void main(void)
 {
-  @<Connect to USB host (must be called first; |sei| is called here)@>@;
+  @<Connect...@>@;
 
   DDRD |= 1 << PD7;
   TCCR0B |= 1 << CS02 | 1 << CS01;
@@ -21,7 +22,7 @@ void main(void)
     FIXME: why to nop's? */
 
   while (1) {
-    @<Get |dtr_rts|@>@;
+    @<Get |...@>@;
     if (dtr_rts) break;
   }
 
@@ -32,7 +33,7 @@ void main(void)
   UEINTX &= ~(1 << FIFOCON);
 
   while (1) {
-    @<Get |dtr_rts|@>@;
+    @<Get |...@>@;
   }
 }
 
