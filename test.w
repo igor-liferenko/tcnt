@@ -36,7 +36,7 @@ void main(void)
   while (1) {
     @<Get |...@>@;
     if (dtr_rts && !once) {
-      once++;
+      once = 1;
       UENUM = EP1;
       while (!(UEINTX & 1 << TXINI)) ;
       UEINTX &= ~(1 << TXINI);
