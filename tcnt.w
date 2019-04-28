@@ -51,11 +51,7 @@ tcsetattr(comfd, TCSANOW, &com_tty);
 
 @ @<Read from TTY@>=
 uint8_t n;
-struct timeval stop, start;
-gettimeofday(&start, NULL);
 while (read(comfd, &n, 1) > 0) { /* FIXME: try `|!= 0|' */
-      gettimeofday(&stop, NULL);
-      printf("took %lu\n", stop.tv_usec - start.tv_usec);
       char s[10];
       int i = 0;
       do { /* generate digits in reverse order */
@@ -71,7 +67,6 @@ while (read(comfd, &n, 1) > 0) { /* FIXME: try `|!= 0|' */
       }
       write(STDOUT_FILENO, s, i);
       write(STDOUT_FILENO, "\n", 1);
-      gettimeofday(&start, NULL);
 }
 
 @ @<Set external...@>=
@@ -91,4 +86,4 @@ setlocale(LC_CTYPE, "C.UTF-8");
 #include <signal.h> /* |struct sigaction|, |sigaction|, |sa_flags|, |sa_handler|, |sa_mask|,
   |SIGCHLD|, |sigemptyset|, |kill|, |SIGTERM| */
 #include <sys/ioctl.h> /* |ioctl|, |TIOCMBIS| */
-#include <sys/time.h>
+#include <sys/wait.h> /* |wait| */

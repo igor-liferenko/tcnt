@@ -62,9 +62,8 @@ void main(void)
 {
   @<Connect...@>@;
 
-  OCR0A = 156; /* interrupt is triggered when counter reaches this */
+  OCR0A = 200; /* interrupt is triggered when counter reaches this */
   TIMSK0 |= 1 << OCIE0A;
-  TCCR0A |= 1 << WGM01;
   TCCR0B |= 1 << CS02 | 1 << CS00; /* max prescaler (64us per tick) */
 
   while (1) {
