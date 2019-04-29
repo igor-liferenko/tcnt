@@ -20,17 +20,7 @@ void main(void)
 
   __asm__ __volatile__ ("nop"); __asm__ __volatile__ ("nop"); /* before reading counter
     FIXME: why to nop's? */
-
-  while (1) {
-    @<Get |...@>@;
-    if (dtr_rts) break;
-  }
-
-  UENUM = EP1;
-  while (!(UEINTX & 1 << TXINI)) ;
-  UEINTX &= ~(1 << TXINI);
-  UEDATX = TCNT0;
-  UEINTX &= ~(1 << FIFOCON);
+  uint8_t tcnt = TCNT0;
 
   int once = 0;
   while (1) {
@@ -40,7 +30,7 @@ void main(void)
       UENUM = EP1;
       while (!(UEINTX & 1 << TXINI)) ;
       UEINTX &= ~(1 << TXINI);
-      UEDATX = TCNT0;
+      UEDATX = tcnt;
       UEINTX &= ~(1 << FIFOCON);
     }
   }
