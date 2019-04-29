@@ -8,7 +8,7 @@
 
 @ This code demonstrates such-and-such.
 
-@(/dev/null@>=
+@c
 void main(void)
 {
   @<Connect...@>@;
@@ -38,7 +38,7 @@ void main(void)
 
 @ This code demonstrates that counter is not reset after executing interrupt.
 
-@c
+@(/dev/null@>=
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
@@ -46,7 +46,6 @@ volatile uint8_t flag = 0;
 ISR(TIMER0_COMPA_vect)
 {
   flag = 1;
-//  TCNT0 = 0;
 }
 void main(void)
 {
