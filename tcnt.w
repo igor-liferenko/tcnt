@@ -1,7 +1,7 @@
 @ This program is for using with `\.{./test.w}'.
 It is like `\.{avrcu}' with the following differences:
 \item{-} it only reads data
-\item{-} it does not change tty settings for gnome-terminal
+\item{-} it does not change settings of stdout tty
 \item{-} it converts received digit to text representation
 \item{-} tty settings are not restored
 
