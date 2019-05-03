@@ -99,3 +99,99 @@ if (UEINTX & 1 << RXSTPI) {
 #include <avr/io.h>
 
 @* Index.
+@ Result: PB0 burns.
+What this experiment tells us:
+Counter is 1 200 ms after starting counter (one tick is 0.001024 sec).
+This means that TOP is reached.
+And the fact that TOP is reached means that OCR4A is updated.
+
+We need to find out if comparison is done before counter is increased or after.
+That is, counter is 0 on start, and TOP is 0, so it did not reach 0. We need
+to know if counter will be compared before increase or after.
+
+@c
+#include <avr/io.h>
+#include <util/delay.h>
+
+void main(void)
+{
+  DDRB |= 1 << PB0;
+
+  TCCR4A |= 1 << PWM4A; /* WGM */
+  OCR4C = 0; /* TOP */
+  TCCR4B |= 1 << CS43 | 1 << CS42 | 1 << CS41 | 1 << CS40; /* max prescaler + start timer */
+
+  _delay_us(8191);
+  if (TCNT4 == 3) PORTB |= 1 << PB0;
+}
+
+@
+1022 = 0
+2046 = 1
+3070 = 2
+4094 = 3
+5118 = 0
+6142 = 1
+7166 = 2
+8190 = 3
+@ Result: PB0 burns.
+What this experiment tells us:
+Counter is 1 200 ms after starting counter (one tick is 0.001024 sec).
+This means that TOP is reached.
+And the fact that TOP is reached means that OCR4A is updated.
+
+We need to find out if comparison is done before counter is increased or after.
+That is, counter is 0 on start, and TOP is 0, so it did not reach 0. We need
+to know if counter will be compared before increase or after.
+
+@c
+#include <avr/io.h>
+#include <util/delay.h>
+
+void main(void)
+{
+  DDRC |= 1 << PC7;
+  TCCR4A |= 1 << PWM4A; /* WGM */
+  OCR4C = 3; /* TOP (minimal) */
+  TC4H = 0x03; OCR4A = 0x98; TC4H = 0; // 920
+  TCCR4B |= 1 << CS43 | 1 << CS42 | 1 << CS41 | 1 << CS40; /* max prescaler + start timer */
+  _delay_ms(5); // wait until counter hits TOP when OCR4A will be set
+  TCCR4A |= 1 << COM4A1 | 1 << COM4A0;
+}
+
+@
+1022 = 0
+2046 = 1
+3070 = 2
+4094 = 3
+5118 = 0
+6142 = 1
+7166 = 2
+8190 = 3
+@ Counter always starts from zero
+
+@c
+#include <avr/io.h>
+#include <avr/interrupt.h>
+#include <util/delay.h>
+
+void main(void)
+{
+  DDRC |= 1 << PC7;
+  TCCR4A |= 1 << PWM4A; /* WGM */
+  OCR4C = 0x9f; /* TOP */
+  OCR4A = 1;
+  TIMSK4 |= 1 << TOIE4; /* when counter reaches TOP */
+  sei();
+  TCCR4B |= 1 << CS43 | 1 << CS42 | 1 << CS41 | 1 << CS40; /* max prescaler + start timer */
+  TCCR4A |= 1 << COM4A1 | 1 << COM4A0;
+
+  TCCR4B |= 0x0F;
+
+  while (1) ;
+}
+
+ISR(TIMER4_OVF_vect)
+{
+  TCCR4B &= 0xF0;
+}
