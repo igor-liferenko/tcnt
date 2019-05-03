@@ -8,13 +8,3 @@ test:
 
 flash:
 	@avrdude -qq -c usbasp -p $(MCU) -U efuse:v:0xcb:m -U hfuse:v:0xd9:m -U lfuse:v:0xff:m -U flash:w:fw.hex
-
-asm:
-        avr-gcc -mmcu=atmega32u4 -DF_CPU=16000000UL -g -o asm.elf asm.S
-        avr-objcopy -O ihex asm.elf asm.hex
-        avrdude -c usbasp -p atmega32u4 -U efuse:v:0xcb:m -U hfuse:v:0xd9:m -U lfuse:v:0xff:m -U flash:w:asm.hex
-
-C:
-        avr-gcc -mmcu=atmega32u4 -DF_CPU=16000000UL -g -Os -o C.elf C.c
-        avr-objcopy -O ihex C.elf C.hex
-        avrdude -c usbasp -p atmega32u4 -U efuse:v:0xcb:m -U hfuse:v:0xd9:m -U lfuse:v:0xff:m -U flash:w:C.hex
