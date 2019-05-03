@@ -1,5 +1,7 @@
 % To compile certain section, change "@@(/dev/null@@>=" to "@@c".
 
+\font\caps=cmcsc10 at 9pt
+
 @ @c
 @<Header files@>@;
 @<Type definitions@>@;
@@ -24,7 +26,7 @@ void main(void)
 
   int once = 0;
   while (1) {
-    @<Get |...@>@;
+    @<Get |dtr_rts|@>@;
     if (dtr_rts && !once) {
       once = 1;
       UENUM = EP1;
@@ -56,7 +58,7 @@ void main(void)
   TCCR0B |= 1 << CS02 | 1 << CS00; /* max prescaler (64us per tick) */
 
   while (1) {
-    @<Get |...@>@;
+    @<Get |dtr_rts|@>@;
     if (dtr_rts && flag) {
       flag = 0;
       UENUM = EP1;  
