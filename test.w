@@ -8,7 +8,7 @@
 
 @ This code demonstrates such-and-such.
 
-@c
+@(/dev/null@>=
 void main(void)
 {
   @<Connect...@>@;
