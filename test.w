@@ -1,5 +1,8 @@
 % To compile certain section, change "@@(/dev/null@@>=" to "@@c".
 
+% TODO: fix /dev/null-section processing for cweave - see instructions for debugging
+% formatting of /dev/null sections in ~/cweb-git/
+
 \font\caps=cmcsc10 at 9pt
 
 @ @c
