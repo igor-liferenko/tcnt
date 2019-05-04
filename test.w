@@ -83,7 +83,16 @@ We need to find out if comparison is done before counter is increased or after.
 That is, counter is 0 on start, and TOP is 0, so it did not reach 0. We need
 to know if counter will be compared before increase or after.
 
-@c
+1022 = 0
+2046 = 1
+3070 = 2
+4094 = 3
+5118 = 0
+6142 = 1
+7166 = 2
+8190 = 3
+
+@(/dev/null@>=
 #include <avr/io.h>
 #include <util/delay.h>
 
@@ -99,15 +108,6 @@ void main(void)
   if (TCNT4 == 3) PORTB |= 1 << PB0;
 }
 
-@
-1022 = 0
-2046 = 1
-3070 = 2
-4094 = 3
-5118 = 0
-6142 = 1
-7166 = 2
-8190 = 3
 @ Result: PB0 burns.
 What this experiment tells us:
 Counter is 1 200 ms after starting counter (one tick is 0.001024 sec).
@@ -118,7 +118,16 @@ We need to find out if comparison is done before counter is increased or after.
 That is, counter is 0 on start, and TOP is 0, so it did not reach 0. We need
 to know if counter will be compared before increase or after.
 
-@c
+1022 = 0
+2046 = 1
+3070 = 2
+4094 = 3
+5118 = 0
+6142 = 1
+7166 = 2
+8190 = 3
+
+@(/dev/null@>=
 #include <avr/io.h>
 #include <util/delay.h>
 
@@ -133,18 +142,9 @@ void main(void)
   TCCR4A |= 1 << COM4A1 | 1 << COM4A0;
 }
 
-@
-1022 = 0
-2046 = 1
-3070 = 2
-4094 = 3
-5118 = 0
-6142 = 1
-7166 = 2
-8190 = 3
 @ Counter always starts from zero
 
-@c
+@(/dev/null@>=
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
@@ -169,6 +169,7 @@ ISR(TIMER4_OVF_vect)
 {
   TCCR4B &= 0xF0;
 }
+
 @ No other requests except {\caps set control line state} come
 after connection is established.
 It is used by host to say the device not to send when DTR/RTS is not on.
@@ -195,4 +196,3 @@ if (UEINTX & 1 << RXSTPI) {
 #include <avr/io.h>
 
 @* Index.
-
