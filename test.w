@@ -1,9 +1,8 @@
-% To compile certain section, change "@@(/dev/null@@>=" to "@@c".
-
-% NOTE: according to ~/cweb-git/README, @<...@> cannot be used in /dev/null-section,
-% so this file cannot be WEAVEd
+% To compile certain section, change "@@(null@@>=" to "@@c".
 
 \font\caps=cmcsc10 at 9pt
+
+\noinx
 
 @ @c
 @<Header files@>@;
@@ -13,7 +12,7 @@
 
 @ This code demonstrates such-and-such.
 
-@(/dev/null@>=
+@(null@>=
 void main(void)
 {
   @<Connect...@>@;
@@ -43,7 +42,7 @@ void main(void)
 
 @ This code demonstrates that counter is not reset after executing interrupt.
 
-@(/dev/null@>=
+@(null@>=
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
@@ -92,7 +91,7 @@ to know if counter will be compared before increase or after.
 7166 = 2
 8190 = 3
 
-@(/dev/null@>=
+@(null@>=
 #include <avr/io.h>
 #include <util/delay.h>
 
@@ -127,7 +126,7 @@ to know if counter will be compared before increase or after.
 7166 = 2
 8190 = 3
 
-@(/dev/null@>=
+@(null@>=
 #include <avr/io.h>
 #include <util/delay.h>
 
@@ -144,7 +143,7 @@ void main(void)
 
 @ Counter always starts from zero
 
-@(/dev/null@>=
+@(null@>=
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
