@@ -73,32 +73,6 @@ void main(void)
   }
 }
 
-@ No other requests except {\caps set control line state} come
-after connection is established.
-It is used by host to say the device not to send when DTR/RTS is not on.
-
-@<Global variables@>=
-U16 dtr_rts = 0;
-
-@ @<Get |dtr_rts|@>=
-UENUM = EP0;
-if (UEINTX & 1 << RXSTPI) {
-  (void) UEDATX; @+ (void) UEDATX;
-  wValue = UEDATX | UEDATX << 8;
-  UEINTX &= ~(1 << RXSTPI);
-  UEINTX &= ~(1 << TXINI); /* STATUS stage */
-  dtr_rts = wValue;
-}
-
-@i ../usb/IN-endpoint-management.w
-@i ../usb/USB.w
-
-@ Program headers are in separate section from USB headers.
-
-@<Header files@>=
-#include <avr/io.h>
-
-@* Index.
 @ Result: PB0 burns.
 What this experiment tells us:
 Counter is 1 200 ms after starting counter (one tick is 0.001024 sec).
@@ -195,3 +169,30 @@ ISR(TIMER4_OVF_vect)
 {
   TCCR4B &= 0xF0;
 }
+@ No other requests except {\caps set control line state} come
+after connection is established.
+It is used by host to say the device not to send when DTR/RTS is not on.
+
+@<Global variables@>=
+U16 dtr_rts = 0;
+
+@ @<Get |dtr_rts|@>=
+UENUM = EP0;
+if (UEINTX & 1 << RXSTPI) {
+  (void) UEDATX; @+ (void) UEDATX;
+  wValue = UEDATX | UEDATX << 8;
+  UEINTX &= ~(1 << RXSTPI);
+  UEINTX &= ~(1 << TXINI); /* STATUS stage */
+  dtr_rts = wValue;
+}
+
+@i ../usb/IN-endpoint-management.w
+@i ../usb/USB.w
+
+@ Program headers are in separate section from USB headers.
+
+@<Header files@>=
+#include <avr/io.h>
+
+@* Index.
+
