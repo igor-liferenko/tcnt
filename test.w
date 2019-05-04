@@ -72,7 +72,7 @@ void main(void)
   }
 }
 
-@ Result: PB0 burns.
+@ Result: PB0 burns. TODO: re-do without LED, by using usb as above
 What this experiment tells us:
 Counter is 1 200 ms after starting counter (one tick is 0.001024 sec).
 This means that TOP is reached.
@@ -107,8 +107,7 @@ void main(void)
   if (TCNT4 == 3) PORTB |= 1 << PB0;
 }
 
-@ Result: PB0 burns.
-What this experiment tells us:
+@ What this experiment tells us:
 Counter is 1 200 ms after starting counter (one tick is 0.001024 sec).
 This means that TOP is reached.
 And the fact that TOP is reached means that OCR4A is updated.
