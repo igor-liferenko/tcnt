@@ -192,5 +192,3 @@ if (UEINTX & 1 << RXSTPI) {
 
 @<Header files@>=
 #include <avr/io.h>
-
-@* Index.
