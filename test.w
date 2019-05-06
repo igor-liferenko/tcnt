@@ -1,6 +1,6 @@
 % To compile certain section, change "@@(null@@>=" to "@@c".
 
-\font\caps=cmcsc10 at 9pt
+\font\caps=cmcsc10 at 9pt % for USB.w
 
 \noinx
 
