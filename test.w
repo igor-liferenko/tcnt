@@ -1,8 +1,10 @@
 % To compile certain section, change "@@(null@@>=" to "@@c".
 
-@i ../usb/USB.h
-
+\let\lheader\rheader
+%\datethis
 \noinx
+
+\input USB
 
 @ @c
 @<Header files@>@;
