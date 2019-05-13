@@ -1,5 +1,5 @@
 null
+*.elf
+*.hex
 tcnt
 *.c
-fw.elf
-fw.hex
