@@ -1,3 +1,5 @@
+% For testing use the same (as where you edit this file) terminal with ttyACM0.
+
 % To compile certain section, change "@@(null@@>=" to "@@c".
 
 \let\lheader\rheader
