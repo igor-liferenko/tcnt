@@ -1,4 +1,4 @@
-% For testing use the same (as where you edit this file) terminal with ttyACM0.
+% For testing use the same (as where you edit this file) terminal with `./tcnt'.
 
 % To compile certain section, change "@@(null@@>=" to "@@c".
 
