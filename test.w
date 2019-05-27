@@ -202,6 +202,7 @@ void main(void)
 
       while (~TIFR1 & 1 << TOV1) ; /* wait when timer overflows */
 
+      // UENUM = EP1;
       while (!(UEINTX & 1 << TXINI)) ;
       UEINTX &= ~(1 << TXINI);
       UEDATX = 'S'; UEDATX = 't'; UEDATX = 'o'; UEDATX = 'p'; UEDATX = '\r'; UEDATX = '\n';
