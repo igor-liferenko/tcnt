@@ -175,6 +175,41 @@ ISR(TIMER4_OVF_vect)
   TCCR4B &= 0xF0;
 }
 
+@ This code shows maximum possible timeout with timer.
+HINT: see 'git lg --follow cu.w' how to print exact timing
+
+@(null@>=
+#include <avr/interrupt.h>
+#include <util/delay.h>
+
+void main(void)
+{
+  @<Connect...@>@;
+
+  int once = 0;
+  while (1) {
+    @<Get |dtr_rts|@>@;
+    if (dtr_rts && !once) {
+      once = 1;
+      UENUM = EP1;  
+      while (!(UEINTX & 1 << TXINI)) ;  
+      UEINTX &= ~(1 << TXINI);  
+      UEDATX = 'S'; UEDATX = 't'; UEDATX = 'a'; UEDATX = 'r'; UEDATX = 't'; UEDATX = '\r';
+        UEDATX = '\n';
+      UEINTX &= ~(1 << FIFOCON);
+
+      TCCR1B |= 1 << CS12 | 1 << CS10; /* start timer */
+
+      while (~TIFR1 & 1 << TOV1) ; /* wait when timer overflows */
+
+      while (!(UEINTX & 1 << TXINI)) ;
+      UEINTX &= ~(1 << TXINI);
+      UEDATX = 'S'; UEDATX = 't'; UEDATX = 'o'; UEDATX = 'p'; UEDATX = '\r'; UEDATX = '\n';
+      UEINTX &= ~(1 << FIFOCON);
+    }
+  }
+}
+
 @ No other requests except {\caps set control line state} come
 after connection is established.
 It is used by host to say the device not to send when DTR/RTS is not on.
