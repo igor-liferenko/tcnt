@@ -1,5 +1,3 @@
-% For testing use the same (as where you edit this file) terminal with `./cu' or `./tcnt'.
-
 % To compile certain section, change "@@(null@@>=" to "@@c".
 
 \let\lheader\rheader
@@ -18,6 +16,7 @@
 @<Create ISR for connecting to USB host@>@;
 
 @ This code demonstrates such-and-such.
+For testing use the same (as where you edit this file) terminal with `./tcnt'.
 
 @(null@>=
 void main(void)
@@ -48,6 +47,7 @@ void main(void)
 }
 
 @ This code demonstrates that counter is not reset after executing interrupt.
+For testing use the same (as where you edit this file) terminal with `./tcnt'.
 
 @(null@>=
 #include <avr/interrupt.h>
@@ -98,6 +98,8 @@ to know if counter will be compared before increase or after.
 7166 = 2
 8190 = 3
 
+For testing use the same (as where you edit this file) terminal with `./tcnt'.
+
 @(null@>=
 #include <avr/io.h>
 #include <util/delay.h>
@@ -132,6 +134,8 @@ to know if counter will be compared before increase or after.
 7166 = 2
 8190 = 3
 
+For testing use the same (as where you edit this file) terminal with `./tcnt'.
+
 @(null@>=
 #include <avr/io.h>
 #include <util/delay.h>
@@ -148,6 +152,8 @@ void main(void)
 }
 
 @ Counter always starts from zero
+
+For testing use the same (as where you edit this file) terminal with `./tcnt'.
 
 @(null@>=
 #include <avr/io.h>
@@ -177,6 +183,8 @@ ISR(TIMER4_OVF_vect)
 
 @ This code shows maximum possible timeout with timer.
 HINT: see 'git lg --follow cu.w' how to print exact timing
+
+For testing use the same (as where you edit this file) terminal with `./cu'.
 
 @(null@>=
 #include <avr/interrupt.h>
