@@ -1,4 +1,4 @@
-% For testing use the same (as where you edit this file) terminal with `./cu'.
+% For testing use the same (as where you edit this file) terminal with `./cu' or `./tcnt'.
 
 % To compile certain section, change "@@(null@@>=" to "@@c".
 
