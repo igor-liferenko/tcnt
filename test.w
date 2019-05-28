@@ -182,7 +182,8 @@ ISR(TIMER4_OVF_vect)
 }
 
 @ This code shows maximum possible timeout with timer.
-HINT: see 'git lg --follow cu.w' how to print exact timing
+HINT: see how PRINT_TIME is done in tcnt.w and print timestamp with milliseconds when new
+data arrives in cu.w
 
 For testing use the same (as where you edit this file) terminal with `./cu'.
 

@@ -51,6 +51,9 @@ tcsetattr(comfd, TCSANOW, &com_tty);
 
 @ NOTE: timing may have error of 1ms, since it is the frequency of polling USB subsystem in the
 kernel
+Also note, that negative values are displayed as huge ones, so ignore them
+
+TODO: just print timestamp with milliseconds instead of difference of start and stop
 
 @d PRINT_TIME 0
 
