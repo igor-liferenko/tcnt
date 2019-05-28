@@ -2,7 +2,6 @@
 It is like `\.{avrcu}' with the following differences:
 \item{-} it only reads data
 \item{-} it does not change attributes of standard output's tty
-\item{-} it converts received digit to text representation
 \item{-} tty settings are not restored
 
 @c

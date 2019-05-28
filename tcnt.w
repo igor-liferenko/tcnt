@@ -49,9 +49,22 @@ tcgetattr(comfd, &com_tty);
 cfmakeraw(&com_tty);
 tcsetattr(comfd, TCSANOW, &com_tty);
 
-@ @<Read from TTY@>=
+@ NOTE: timing may have error of 1ms, since it is the frequency of polling USB subsystem in the
+kernel
+
+@d PRINT_TIME 0
+
+@<Read from TTY@>=
 uint8_t n;
+#if PRINT_TIME
+struct timeval stop, start;
+gettimeofday(&start, NULL);
+#endif
 while (read(comfd, &n, 1) > 0) { /* FIXME: try `|!= 0|' */
+#if PRINT_TIME
+      gettimeofday(&stop, NULL);
+      printf("took %lu\n", stop.tv_usec - start.tv_usec);
+#endif
       char s[10];
       int i = 0;
       do { /* generate digits in reverse order */
@@ -67,6 +80,9 @@ while (read(comfd, &n, 1) > 0) { /* FIXME: try `|!= 0|' */
       }
       write(STDOUT_FILENO, s, i);
       write(STDOUT_FILENO, "\n", 1);
+#if PRINT_TIME
+      gettimeofday(&start, NULL);
+#endif
 }
 
 @ @<Set external...@>=
@@ -86,4 +102,4 @@ setlocale(LC_CTYPE, "C.UTF-8");
 #include <signal.h> /* |struct sigaction|, |sigaction|, |sa_flags|, |sa_handler|, |sa_mask|,
   |SIGCHLD|, |sigemptyset|, |kill|, |SIGTERM| */
 #include <sys/ioctl.h> /* |ioctl|, |TIOCMBIS| */
-#include <sys/wait.h> /* |wait| */
+#include <sys/time.h>
