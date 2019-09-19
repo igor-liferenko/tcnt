@@ -8,6 +8,11 @@ when transmission is finished (see demo/demo.ch).
 Use signal handler with SA_RESTART and timer (see git lg in time/) and in signal handler
 call ioctl TIOCMGET and exit
 
+int arg;
+ioctl(comfd, TIOCMGET, &arg);
+if (arg & TIOCM_DSR)
+  ...
+
 @c
 #include <fcntl.h> /* |open|, |O_RDONLY| */
 #include <unistd.h> /* |read|, |write|, |STDOUT_FILENO| */
