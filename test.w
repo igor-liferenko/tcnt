@@ -232,14 +232,12 @@ if (UEINTX & 1 << RXSTPI) {
   UEINTX &= ~(1 << TXINI); /* STATUS stage */
 }
 
-@ To simplify tcnt.w
-
-@<Ignore echo@>=
-    UENUM = EP2;
-    if (UEINTX & 1 << RXOUTI) {
-      UEINTX &= ~(1 << RXOUTI);
-      UEINTX &= ~(1 << FIFOCON);
-    }
+@ @<Ignore echo@>=
+UENUM = EP2;
+if (UEINTX & 1 << RXOUTI) {
+  UEINTX &= ~(1 << RXOUTI);
+  UEINTX &= ~(1 << FIFOCON);
+}
 
 @i ../usb/IN-endpoint-management.w
 @i ../usb/USB.w
