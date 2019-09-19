@@ -35,7 +35,7 @@ void main(void)
 
   int once = 0;
   while (1) {
-    @<Handle...@>@;
+    @<Ignore setup@>@;
     UENUM = EP1;
     if ((UEINTX & 1 << TXINI) && !once) {
       once = 1;
@@ -221,7 +221,11 @@ void main(void)
   }
 }
 
-@ @<Handle \.{EP0}@>=
+@ Dummy. Remove when conversion as in first example is done.
+
+@<Get |dtr|@>=
+
+@ @<Ignore setup@>=
 UENUM = EP0;
 if (UEINTX & 1 << RXSTPI) {
   UEINTX &= ~(1 << RXSTPI);

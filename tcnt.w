@@ -1,8 +1,6 @@
 @ @c
-#include <termios.h> /* |TIOCM_RTS| */
 #include <fcntl.h> /* |open|, |O_RDWR| */
 #include <unistd.h> /* |read|, |write|, |STDOUT_FILENO| */
-#include <sys/ioctl.h> /* |ioctl|, |TIOCMBIS| */
 
 int main(int argc, char **argv)
 {
