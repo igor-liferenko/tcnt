@@ -1,4 +1,7 @@
-@ @c
+@ This is like \.{cat}, but it exits after outputting the first line, and it does not output
+newline character.
+
+@c
 #include <fcntl.h> /* |open|, |O_RDONLY| */
 #include <unistd.h> /* |read|, |write|, |STDOUT_FILENO| */
 
