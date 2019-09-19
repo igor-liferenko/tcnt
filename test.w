@@ -16,7 +16,8 @@
 @<Create ISR for connecting to USB host@>@;
 
 @ This code demonstrates such-and-such.
-For testing use the same (as where you edit this file) terminal with `./tcnt'.
+For testing use only one gnome-terminal window (both for editing this file and for
+`./tcnt /dev/ttyACM0 | od -An -tu1').
 
 @(null@>=
 void main(void)
@@ -29,20 +30,20 @@ void main(void)
   PORTD |= 1 << PD7; PORTD &= ~(1 << PD7); /* one tick */
 
   __asm__ __volatile__ ("nop"); __asm__ __volatile__ ("nop"); /* before reading counter
-    FIXME: why to nop's? */
+    FIXME: why two nop's? */
   uint8_t tcnt = TCNT0;
 
   int once = 0;
   while (1) {
-    @<Get |dtr_rts|@>@;
-    if (dtr_rts && !once) {
+    @<Handle...@>@;
+    UENUM = EP1;
+    if ((UEINTX & 1 << TXINI) && !once) {
       once = 1;
-      UENUM = EP1;
-      while (!(UEINTX & 1 << TXINI)) ;
       UEINTX &= ~(1 << TXINI);
-      UEDATX = tcnt;
+      UEDATX = tcnt; UEDATX = '\n';
       UEINTX &= ~(1 << FIFOCON);
     }
+    @<Ignore echo@>@;
   }
 }
 
@@ -67,8 +68,8 @@ void main(void)
   TCCR0B |= 1 << CS02 | 1 << CS00; /* max prescaler (64us per tick) */
 
   while (1) {
-    @<Get |dtr_rts|@>@;
-    if (dtr_rts && flag) {
+    @<Get |dtr|@>@;
+    if (dtr && flag) {
       flag = 0;
       UENUM = EP1;  
       while (!(UEINTX & 1 << TXINI)) ;  
@@ -197,8 +198,8 @@ void main(void)
 
   int once = 0;
   while (1) {
-    @<Get |dtr_rts|@>@;
-    if (dtr_rts && !once) {
+    @<Get |dtr|@>@;
+    if (dtr && !once) {
       once = 1;
       UENUM = EP1;  
       while (!(UEINTX & 1 << TXINI)) ;  
@@ -220,22 +221,21 @@ void main(void)
   }
 }
 
-@ No other requests except {\caps set control line state} come
-after connection is established.
-It is used by host to say the device not to send when DTR/RTS is not on.
-
-@<Global variables@>=
-U16 dtr_rts = 0;
-
-@ @<Get |dtr_rts|@>=
+@ @<Handle \.{EP0}@>=
 UENUM = EP0;
 if (UEINTX & 1 << RXSTPI) {
-  (void) UEDATX; @+ (void) UEDATX;
-  wValue = UEDATX | UEDATX << 8;
   UEINTX &= ~(1 << RXSTPI);
   UEINTX &= ~(1 << TXINI); /* STATUS stage */
-  dtr_rts = wValue;
 }
+
+@ To simplify tcnt.w
+
+@<Ignore echo@>=
+    UENUM = EP2;
+    if (UEINTX & 1 << RXOUTI) {
+      UEINTX &= ~(1 << RXOUTI);
+      UEINTX &= ~(1 << FIFOCON);
+    }
 
 @i ../usb/IN-endpoint-management.w
 @i ../usb/USB.w
