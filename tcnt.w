@@ -5,13 +5,12 @@ TODO: Revert DTR check in test.w and disable canonical mode here (while we are a
 disable echo too). And do not use '\n' in test.w - instead send out-of-band signal
 on EP3 (you may use DSR, but just as a conventional signal - not in its original sense)
 when transmission is finished (see demo/demo.ch).
-Use signal handler with SA_RESTART and timer (see git lg in time/) and in signal handler
-call ioctl TIOCMGET and exit
+Use the following signal handler with SA_RESTART and timer (see git lg in time/):
 
 int arg;
 ioctl(comfd, TIOCMGET, &arg);
 if (arg & TIOCM_DSR)
-  ...
+  exit(EXIT_SUCCESS);
 
 @c
 #include <fcntl.h> /* |open|, |O_RDONLY| */
