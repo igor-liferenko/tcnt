@@ -1,0 +1,25 @@
+in cu.w just use printf("%d\n", n); fflush(stdout);
+
+test TIOCMGET - see tcnt.w and the following in ~/demo/demo.ch
+
+CDC\S6.3 (see also CDC\S3.6.2.1).
+
+@<Notify host if |serial_state| changed@>=
+if (serial_state_saved.all != serial_state.all) {
+  serial_state_saved.all = serial_state.all;
+  UENUM = EP3;
+  while (!(UEINTX & 1 << TXINI)) ; /* wait until previous packet is sent */
+  UEINTX &= ~(1 << TXINI);
+  UEDATX = 0xA1;
+  UEDATX = 0x20;
+  UEDATX = 0x00; @+ UEDATX = 0x00;
+  UEDATX = 0x00; @+ UEDATX = 0x00;
+  UEDATX = 0x02; @+ UEDATX = 0x00;
+  UEDATX = ((U8 *) &serial_state.all)[0];
+  UEDATX = ((U8 *) &serial_state.all)[1];
+  UEINTX &= ~(1 << FIFOCON);
+}
+
+------------------------------------
+
+make separate test file for each test in test.w via @(
