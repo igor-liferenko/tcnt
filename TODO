@@ -1,3 +1,5 @@
+do test.w without USB - like in usb/test.w
+
 in cu.w just use printf("%d\n", n); fflush(stdout);
 
 test TIOCMGET - see tcnt.w and the following in ~/demo/demo.ch
